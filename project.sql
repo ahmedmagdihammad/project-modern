@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 10, 2021 at 04:43 AM
+-- Generation Time: Jul 11, 2021 at 04:16 PM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.3.27
 
@@ -51,9 +51,11 @@ INSERT INTO `admin` (`id`, `name`, `mobile`, `email`, `password`, `created_at`, 
 --
 
 CREATE TABLE `customer` (
-  `id` int(11) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(191) NOT NULL,
   `mobile` int(11) NOT NULL,
+  `email` varchar(127) DEFAULT NULL,
+  `password` varchar(1024) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -66,8 +68,8 @@ CREATE TABLE `customer` (
 
 CREATE TABLE `customer_products` (
   `id` int(11) UNSIGNED NOT NULL,
-  `customer_id` int(11) NOT NULL,
-  `products_id` int(11) NOT NULL,
+  `customer_id` int(11) UNSIGNED NOT NULL,
+  `product_id` int(11) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -79,11 +81,25 @@ CREATE TABLE `customer_products` (
 --
 
 CREATE TABLE `orders` (
-  `code` int(11) NOT NULL,
-  `customer_id` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL,
+  `code` int(11) UNSIGNED NOT NULL,
+  `customer_id` int(11) UNSIGNED NOT NULL,
+  `product_id` int(11) UNSIGNED NOT NULL,
   `Quantity` int(11) DEFAULT NULL,
-  `total_price` int(11) NOT NULL,
+  `total` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_products`
+--
+
+CREATE TABLE `order_products` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `order_code` int(11) UNSIGNED NOT NULL,
+  `product_id` int(11) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -97,9 +113,10 @@ CREATE TABLE `orders` (
 CREATE TABLE `products` (
   `id` int(11) UNSIGNED NOT NULL,
   `name` varchar(127) NOT NULL,
+  `img` varchar(1024) DEFAULT NULL,
   `price` int(11) NOT NULL,
   `category` varchar(1024) DEFAULT NULL,
-  `admin_id` int(11) NOT NULL,
+  `admin_id` int(10) UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -112,8 +129,7 @@ CREATE TABLE `products` (
 -- Indexes for table `admin`
 --
 ALTER TABLE `admin`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `customer`
@@ -125,13 +141,32 @@ ALTER TABLE `customer`
 -- Indexes for table `customer_products`
 --
 ALTER TABLE `customer_products`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `customer_id` (`customer_id`),
+  ADD KEY `product_id` (`product_id`);
+
+--
+-- Indexes for table `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`code`),
+  ADD KEY `customer_id` (`customer_id`),
+  ADD KEY `product_id` (`product_id`);
+
+--
+-- Indexes for table `order_products`
+--
+ALTER TABLE `order_products`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `order_code` (`order_code`),
+  ADD KEY `product_id` (`product_id`);
 
 --
 -- Indexes for table `products`
 --
 ALTER TABLE `products`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `admin_id` (`admin_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -141,13 +176,13 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `customer_products`
@@ -156,10 +191,53 @@ ALTER TABLE `customer_products`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `code` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `order_products`
+--
+ALTER TABLE `order_products`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `customer_products`
+--
+ALTER TABLE `customer_products`
+  ADD CONSTRAINT `customer_products_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `customer_products_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `orders`
+--
+ALTER TABLE `orders`
+  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `order_products`
+--
+ALTER TABLE `order_products`
+  ADD CONSTRAINT `order_products_ibfk_1` FOREIGN KEY (`order_code`) REFERENCES `orders` (`code`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `order_products_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `products`
+--
+ALTER TABLE `products`
+  ADD CONSTRAINT `products_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
