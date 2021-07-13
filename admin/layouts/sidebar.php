@@ -2,7 +2,7 @@
     <!-- Brand Logo -->
     <a href="<?php echo $root; ?>index.php" class="brand-link">
       <img src="<?php echo $root; ?>assets/img/logo/logo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">__</span>
+      <span class="brand-text font-weight-light">PSW</span>
     </a>
 
     <!-- Sidebar -->
