@@ -81,7 +81,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <th>Name</th>
                     <th>Category</th>
                     <th>price</th>
-                    <th>Admin</th>
                     <th>Action</th>
                   </tr>
                   </thead>
@@ -94,7 +93,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <td><?php echo $product['name']; ?></td>
                       <td><?php echo $product['category']; ?></td>
                       <td><?php echo $product['price']; ?></td>
-                      <td><?php echo $product['admin_id']; ?></td>
                       <td>
                         <div class="row">
                           <a href="<?php echo 'edit.php?id='.$product['id']; ?>" class="btn btn-link"><i class="fa fa-edit"></i></a>
