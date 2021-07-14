@@ -31,7 +31,7 @@
             </a>
           </li>
 
-          <li class="nav-item  <?php if($namePage == 'product' || $namePage == 'product-create' || $namePage == 'product-edit'){ echo ' menu-open'; }else{ echo 'menu-close'; } ?>">
+          <li class="nav-item menu-open <?php if($namePage == 'product' || $namePage == 'product-create' || $namePage == 'product-edit'){ echo ' menu-open'; }else{ echo 'menu-close'; } ?>">
             <a href="#" class="nav-link <?php if($namePage == 'product' || $namePage == 'product-create' || $namePage == 'product-edit'){ echo 'active'; } ?>">
               <i class="nav-icon fa fa-archive"></i>
               <p>
@@ -63,8 +63,8 @@
             </ul>
           </li>
 
-          <li class="nav-item menu-close">
-            <a href="#" class="nav-link  <?php if($namePage == 'orders.php'){ echo 'active'; } ?>">
+          <li class="nav-item menu-open <?php if( $namePage == 'orders'){ echo ' menu-open'; }else{ echo 'menu-close'; } ?>">
+            <a href="#" class="nav-link  <?php if($namePage == 'orders'){ echo 'active'; } ?>">
               <i class="nav-icon fa fa-shopping-bag"></i>
               <p>
                 Order
@@ -73,23 +73,15 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="orders.php" class="nav-link  <?php if($namePage == 'orders.php'){ echo 'active'; } ?>">
+                <a href="<?php echo $root; ?>orders/index.php" class="nav-link  <?php if($namePage == 'orders'){ echo 'active'; } ?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Orders</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Order Statuses</p>
                 </a>
               </li>
             </ul>
           </li>
 
-          
-
-          <li class="nav-item  <?php if($namePage == 'admin' || $namePage == 'admin-create' || $namePage == 'admin-edit'){ echo ' menu-open'; }else{ echo 'menu-close'; } ?>">
+          <li class="nav-item menu-open <?php if($namePage == 'admin' || $namePage == 'admin-create' || $namePage == 'admin-edit'){ echo ' menu-open'; }else{ echo 'menu-close'; } ?>">
             <a href="#" class="nav-link <?php if($namePage == 'admin' || $namePage == 'admin-create' || $namePage == 'admin-edit'){ echo 'active'; } ?>">
               <i class="nav-icon fa fa-user-plus"></i>
               <p>
@@ -121,14 +113,14 @@
             </ul>
           </li>
 
-          <!-- <li class="nav-item">
-            <a href="<?php echo $root; ?>customers.php" class="nav-link  <?php if($namePage == 'customers.php'){ echo 'active'; } ?>">
+          <li class="nav-item">
+            <a href="<?php echo $root; ?>customers/index.php" class="nav-link  <?php if($namePage == 'customers'){ echo 'active'; } ?>">
               <i class="nav-icon fa fa-users"></i>
               <p>
                 Customers
               </p>
             </a>
-          </li> -->
+          </li>
 
         </ul>
       </nav>
